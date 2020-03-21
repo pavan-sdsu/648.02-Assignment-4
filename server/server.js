@@ -1,9 +1,9 @@
 require("dotenv").config();
 
-const fs = require('fs');
+const fs = require("fs");
 const express = require("express");
-const { ApolloServer } = require('apollo-server-express');
-const { MongoClient } = require('mongodb');
+const { ApolloServer } = require("apollo-server-express");
+const { MongoClient } = require("mongodb");
 const app = express();
 
 const client = new MongoClient("mongodb+srv://pavan:" + process.env.MONGO_PASS + "@pavan-sdsu-7v19x.mongodb.net/648-assn-4", {
@@ -13,8 +13,8 @@ const client = new MongoClient("mongodb+srv://pavan:" + process.env.MONGO_PASS +
 let inventory, counter;
 client.connect((err, client) => {
 	const db = client.db();
-	inventory = db.collection('inventory');
-	counter = db.collection('counter');
+	inventory = db.collection("inventory");
+	counter = db.collection("counter");
 });
 
 async function getNextSequence() {
@@ -55,10 +55,10 @@ const resolvers = {
 };
 
 const server = new ApolloServer({
-	typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
+	typeDefs: fs.readFileSync("./schema.graphql", "utf-8"),
 	resolvers
 });
 
 server.applyMiddleware({ app });
 
-app.listen(process.env.API_SERVER_PORT, () => console.log('Listening on PORT', process.env.API_SERVER_PORT));
+app.listen(process.env.API_SERVER_PORT, () => console.log("Listening on PORT", process.env.API_SERVER_PORT));

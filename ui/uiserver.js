@@ -5,4 +5,4 @@ const PORT = 8000;
 
 app.use(express.static(path.join(__dirname, "/public")));
 
-app.listen(PORT, () => console.log('Listening on PORT', PORT));
+app.listen(PORT, () => console.log("Listening on PORT", PORT));

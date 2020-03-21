@@ -228,9 +228,9 @@ class ProductList extends React.Component {
 		}
 		`;
 
-		fetch(BASE_URL + '/graphql', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+		fetch(BASE_URL + "/graphql", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ query })
 		}).then(res => res.json()).then(res => {
 			this.setState((state, props) => {
@@ -259,9 +259,9 @@ class ProductList extends React.Component {
 		}
 		`;
 
-		fetch(BASE_URL + '/graphql', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+		fetch(BASE_URL + "/graphql", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ query })
 		}).then(res => res.json()).then(res => {
 			this.setState((state, props) => {
