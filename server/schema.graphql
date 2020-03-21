@@ -8,6 +8,7 @@ type Mutation {
 
 type Product {
 	id: Int!
+	_id: String!
 	Category: [Category]!
 	Name: String!
 	Price: Float

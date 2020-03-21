@@ -1,39 +1,64 @@
+require("dotenv").config();
+
 const fs = require('fs');
 const express = require("express");
 const { ApolloServer } = require('apollo-server-express');
+const { MongoClient } = require('mongodb');
 const app = express();
-const path = require("path");
 
-const PORT = 3000;
+const client = new MongoClient("mongodb+srv://pavan:" + process.env.MONGO_PASS + "@pavan-sdsu-7v19x.mongodb.net/648-assn-4", {
+	useUnifiedTopology: true
+});
 
-let PRODUCTS = []
+let inventory, counter;
+client.connect((err, client) => {
+	const db = client.db();
+	inventory = db.collection('inventory');
+	counter = db.collection('counter');
+});
+
+async function getNextSequence() {
+	const result = await counter.findOneAndUpdate(
+		{  },
+		{ $inc: { count: 1 } },
+		{ returnOriginal: false },
+	);
+	return result.value.count;
+}
 
 const resolvers = {
 	Query: {
-		productList: () => PRODUCTS
+		productList: async () => {
+			try {
+				const result = await inventory.find({}).toArray()
+				return result;
+			} catch (error) {
+				return []
+			}
+		}
 	},
 	Mutation: {
-		addProduct: (_, { Category, Price, Name, Image }) => {
+		addProduct: async (_, { Category, Price, Name, Image }) => {
 			const PRODUCT = {
-				id: PRODUCTS.length+1,
+				id: await getNextSequence(),
 				Category: Category,
 				Price: Price,
 				Name: Name,
 				Image: Image
 			}
-			PRODUCTS.push(PRODUCT)
-			return PRODUCT
+
+			const result = await inventory.insertOne(PRODUCT);
+			const savedIssue = await inventory.findOne({ _id: result.insertedId });
+			return savedIssue;
 		}
 	}
 };
-  
+
 const server = new ApolloServer({
-	typeDefs: fs.readFileSync('./server/schema.graphql', 'utf-8'),
+	typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
 	resolvers
 });
 
 server.applyMiddleware({ app });
-app.use(express.static(path.join(__dirname, "../public")));
-app.use(express.static(path.join(__dirname, "../static")));
 
-app.listen(PORT, () => console.log('Listening on PORT', PORT));
+app.listen(process.env.API_SERVER_PORT, () => console.log('Listening on PORT', process.env.API_SERVER_PORT));

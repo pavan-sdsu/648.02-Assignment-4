@@ -1,3 +1,5 @@
+const BASE_URL = "http://localhost:3000";
+
 class ProductAdd extends React.Component {
 	constructor(props) {
 		super(props);
@@ -216,6 +218,7 @@ class ProductList extends React.Component {
 		const query = `
 		query {
 			productList {
+				_id
 				id
 				Category
 				Price
@@ -225,7 +228,7 @@ class ProductList extends React.Component {
 		}
 		`;
 
-		fetch('/graphql', {
+		fetch(BASE_URL + '/graphql', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ query })
@@ -246,6 +249,7 @@ class ProductList extends React.Component {
 				Price: ` + product.Price + `
 				Image: "` + product.Image + `"
 			) {
+				_id
 				id
 				Category
 				Price
@@ -255,7 +259,7 @@ class ProductList extends React.Component {
 		}
 		`;
 
-		fetch('/graphql', {
+		fetch(BASE_URL + '/graphql', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ query })
