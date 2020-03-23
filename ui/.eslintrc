@@ -4,9 +4,9 @@
         "ecmaVersion": 2017
     },
 	"rules": {
-    	"quotes": 1
+		"react/prop-types": "off"
 	},
 	"env": {
-		"node": "true"
+		"browser": true
 	}
 }
